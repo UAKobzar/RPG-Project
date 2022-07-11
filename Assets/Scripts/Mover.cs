@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class Mover : MonoBehaviour
 {
     [SerializeField]
-    public Transform Target;
+    public Transform target;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +20,7 @@ public class Mover : MonoBehaviour
 
         var agent = GetComponent<NavMeshAgent>();
 
-        agent.destination = Target.position;
+        agent.destination = target.position;
         
     }
 }
