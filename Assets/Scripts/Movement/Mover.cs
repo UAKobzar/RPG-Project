@@ -7,6 +7,13 @@ namespace RPG.Movement
 {
     public class Mover : MonoBehaviour
     {
+        private NavMeshAgent _navMeshAgent;
+
+        void Start()
+        {
+            _navMeshAgent = GetComponent<NavMeshAgent>();
+        }
+
         void Update()
         {
             UpdateAnimator();
@@ -14,14 +21,18 @@ namespace RPG.Movement
 
         public void MoveTo(Vector3 destination)
         {
-            var agent = GetComponent<NavMeshAgent>();
+            _navMeshAgent.destination = destination;
+            _navMeshAgent.isStopped = false;
+        }
 
-            agent.destination = destination;
+        public void Stop()
+        {
+            _navMeshAgent.isStopped = true;
         }
 
         private void UpdateAnimator()
         {
-            Vector3 velocity = GetComponent<NavMeshAgent>().velocity;
+            Vector3 velocity = _navMeshAgent.velocity;
             Vector3 localVelocity = transform.InverseTransformDirection(velocity);
             float speed = localVelocity.z;
 

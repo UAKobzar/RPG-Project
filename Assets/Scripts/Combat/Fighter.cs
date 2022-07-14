@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RPG.Movement;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +10,38 @@ namespace RPG.Combat
 {
     internal class Fighter : MonoBehaviour
     {
-        public void Atack(CombatTarget target)
+        [field: SerializeField]
+        public float weaponRange { get; set; } = 2f;
+
+        private Transform _target;
+
+        private Mover _mover;
+
+        void Start()
         {
-            print("Take that you short, squat peasant!");
+            _mover = GetComponent<Mover>();
+        }
+
+        public void Update()
+        {
+            if (_target != null)
+            {
+                var distance = Vector3.Distance(transform.position, _target.position);
+
+                if (distance > weaponRange)
+                {
+                    _mover.MoveTo(_target.position);
+                }
+                else
+                {
+                    _mover.Stop();
+                }
+            }
+        }
+
+        public void Atack(CombatTarget CombatTarget)
+        {
+            _target = CombatTarget?.transform;
         }
     }
 }
