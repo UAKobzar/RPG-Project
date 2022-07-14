@@ -1,4 +1,5 @@
-﻿using RPG.Movement;
+﻿using RPG.Core;
+using RPG.Movement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 namespace RPG.Combat
 {
-    internal class Fighter : MonoBehaviour
+    internal class Fighter : MonoBehaviour, IAction
     {
         [field: SerializeField]
         public float weaponRange { get; set; } = 2f;
@@ -34,14 +35,20 @@ namespace RPG.Combat
                 }
                 else
                 {
-                    _mover.Stop();
+                    _mover.Cancel();
                 }
             }
         }
 
         public void Atack(CombatTarget CombatTarget)
         {
+            GetComponent<ActionScheduler>().StartAction(this);
             _target = CombatTarget?.transform;
+        }
+
+        public void Cancel()
+        {
+            _target = null;
         }
     }
 }

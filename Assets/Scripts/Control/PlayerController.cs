@@ -51,7 +51,7 @@ namespace RPG.Control
                 {
                     var component = GetComponent<Mover>();
 
-                    component.MoveTo(hitInfo.point);
+                    component.StartMoveAction(hitInfo.point);
                 }
                 return true;
             }
