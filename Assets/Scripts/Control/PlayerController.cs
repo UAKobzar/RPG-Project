@@ -13,19 +13,12 @@ namespace RPG.Control
     {
         public void Update()
         {
-            InteractWithMovement();
-            InteractWithCombat();
+            if (InteractWithCombat()) return;
+            if (InteractWithMovement()) return;
+
         }
 
-        private void InteractWithMovement()
-        {
-            if (Input.GetMouseButton(1))
-            {
-                MoveToCursor();
-            }
-        }
-
-        private void InteractWithCombat()
+        private bool InteractWithCombat()
         {
             RaycastHit[] hits = Physics.RaycastAll(GetMouseRay());
 
@@ -35,25 +28,35 @@ namespace RPG.Control
 
                 if (target != null)
                 {
-                    if (Input.GetMouseButton(1))
+                    if (Input.GetMouseButtonDown(1))
                     {
                         Fighter fighterComponent = GetComponent<Fighter>();
                         fighterComponent?.Atack(target);
                     }
+
+                    return true;
                 }
             }
+
+            return false;
         }
 
-        private void MoveToCursor()
+        private bool InteractWithMovement()
         {
             bool isHit = Physics.Raycast(GetMouseRay(), out RaycastHit hitInfo);
 
             if (isHit)
             {
-                var component = GetComponent<Mover>();
+                if (Input.GetMouseButton(1))
+                {
+                    var component = GetComponent<Mover>();
 
-                component.MoveTo(hitInfo.point);
+                    component.MoveTo(hitInfo.point);
+                }
+                return true;
             }
+
+            return false;
         }
 
         private static Ray GetMouseRay()
