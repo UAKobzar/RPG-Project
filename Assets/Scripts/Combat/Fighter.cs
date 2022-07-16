@@ -35,9 +35,15 @@ namespace RPG.Combat
                 }
                 else
                 {
-                    _mover.Cancel();
+                    _mover.Cancel(); 
+                    AttackBeheaviour();
                 }
             }
+        }
+
+        private void AttackBeheaviour()
+        {
+            GetComponent<Animator>().SetTrigger("attack");
         }
 
         public void Atack(CombatTarget CombatTarget)
@@ -49,6 +55,12 @@ namespace RPG.Combat
         public void Cancel()
         {
             _target = null;
+        }
+
+        //Animation Event
+        private void Hit()
+        {
+
         }
     }
 }
