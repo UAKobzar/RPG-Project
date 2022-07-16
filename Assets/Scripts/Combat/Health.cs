@@ -12,11 +12,25 @@ namespace RPG.Combat
         [SerializeField]
         private float _health = 100f;
 
+        private bool isDead = false;
+
         public void TakeDamage(float damage)
         {
             _health -= damage;
-            _health = _health < 0 ? 0 : _health;
-            print(_health);
+            if(_health <= 0)
+            {
+                _health = 0;
+                Die();
+            }
+        }
+
+        private void Die()
+        {
+            if (!isDead)
+            {
+                GetComponent<Animator>().SetTrigger("die");
+                isDead = true;
+            }
         }
     }
 }
