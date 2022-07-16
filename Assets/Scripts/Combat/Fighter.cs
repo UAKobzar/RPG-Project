@@ -15,6 +15,8 @@ namespace RPG.Combat
         private float _weaponRange  = 2f;
         [SerializeField]
         private float _timeBetweenAttack = 1f;
+        [SerializeField]
+        private float _weaponDamage = 5f;
 
         private float _timeSinceLastAttack;
 
@@ -69,7 +71,7 @@ namespace RPG.Combat
         //Animation Event
         private void Hit()
         {
-
+            _target?.gameObject.GetComponent<Health>()?.TakeDamage(_weaponDamage);
         }
     }
 }
