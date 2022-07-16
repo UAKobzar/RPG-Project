@@ -11,12 +11,22 @@ namespace RPG.Control
 {
     public class PlayerController : MonoBehaviour
     {
-        public void Update()
+
+        private Fighter _fighter;
+
+        private void Start()
+        {
+            _fighter = GetComponent<Fighter>();
+        }
+
+        private void Update()
         {
             if (InteractWithCombat()) return;
             if (InteractWithMovement()) return;
 
         }
+
+
 
         private bool InteractWithCombat()
         {
@@ -26,7 +36,7 @@ namespace RPG.Control
             {
                 var target = hit.transform.gameObject.GetComponent<CombatTarget>();
 
-                if (target != null)
+                if (_fighter.CanAttack(target))
                 {
                     if (Input.GetMouseButtonDown(1))
                     {

@@ -55,6 +55,7 @@ namespace RPG.Combat
         private void AttackBeheaviour()
         {
             transform.LookAt(_target.transform.position);
+            _animator.ResetTrigger("stopAttack");
             if (_timeBetweenAttack <= _timeSinceLastAttack)
             {
                 _animator.SetTrigger("attack");
@@ -72,6 +73,13 @@ namespace RPG.Combat
         {
             _target = null;
             _animator.SetTrigger("stopAttack");
+            _animator.ResetTrigger("attack");
+
+        }
+
+        public bool CanAttack(CombatTarget target)
+        {
+            return target != null && !target.GetComponent<Health>().IsDead;
         }
 
         //Animation Event
