@@ -12,7 +12,7 @@ namespace RPG.Combat
         [SerializeField]
         private float _health = 100f;
 
-        private bool isDead = false;
+        public bool IsDead { get; private set; } = false;
 
         public void TakeDamage(float damage)
         {
@@ -26,10 +26,10 @@ namespace RPG.Combat
 
         private void Die()
         {
-            if (!isDead)
+            if (!IsDead)
             {
                 GetComponent<Animator>().SetTrigger("die");
-                isDead = true;
+                IsDead = true;
             }
         }
     }

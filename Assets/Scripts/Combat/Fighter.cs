@@ -20,25 +20,29 @@ namespace RPG.Combat
 
         private float _timeSinceLastAttack;
 
-        private Transform _target;
+        private Health _target;
+
+
         private Mover _mover;
+        private Animator _animator;
 
         void Start()
         {
             _mover = GetComponent<Mover>();
+            _animator = GetComponent<Animator>();
         }
 
         public void Update()
         {
             _timeSinceLastAttack += Time.deltaTime;
 
-            if (_target != null)
+            if (_target != null && !_target.IsDead)
             {
-                var distance = Vector3.Distance(transform.position, _target.position);
+                var distance = Vector3.Distance(transform.position, _target.transform.position);
 
                 if (distance > _weaponRange)
                 {
-                    _mover.MoveTo(_target.position);
+                    _mover.MoveTo(_target.transform.position);
                 }
                 else
                 {
@@ -52,26 +56,27 @@ namespace RPG.Combat
         {
             if (_timeBetweenAttack <= _timeSinceLastAttack)
             {
-                GetComponent<Animator>().SetTrigger("attack");
+                _animator.SetTrigger("attack");
                 _timeSinceLastAttack = 0f;
             }
         }
 
-        public void Atack(CombatTarget CombatTarget)
+        public void Atack(CombatTarget combatTarget)
         {
             GetComponent<ActionScheduler>().StartAction(this);
-            _target = CombatTarget?.transform;
+            _target = combatTarget.GetComponent<Health>();
         }
 
         public void Cancel()
         {
             _target = null;
+            _animator.SetTrigger("stopAttack");
         }
 
         //Animation Event
         private void Hit()
         {
-            _target?.gameObject.GetComponent<Health>()?.TakeDamage(_weaponDamage);
+            _target?.TakeDamage(_weaponDamage);
         }
     }
 }
