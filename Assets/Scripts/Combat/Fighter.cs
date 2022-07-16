@@ -11,11 +11,14 @@ namespace RPG.Combat
 {
     internal class Fighter : MonoBehaviour, IAction
     {
-        [field: SerializeField]
-        public float weaponRange { get; set; } = 2f;
+        [SerializeField]
+        private float _weaponRange  = 2f;
+        [SerializeField]
+        private float _timeBetweenAttack = 1f;
+
+        private float _timeSinceLastAttack;
 
         private Transform _target;
-
         private Mover _mover;
 
         void Start()
@@ -25,11 +28,13 @@ namespace RPG.Combat
 
         public void Update()
         {
+            _timeSinceLastAttack += Time.deltaTime;
+
             if (_target != null)
             {
                 var distance = Vector3.Distance(transform.position, _target.position);
 
-                if (distance > weaponRange)
+                if (distance > _weaponRange)
                 {
                     _mover.MoveTo(_target.position);
                 }
@@ -43,7 +48,11 @@ namespace RPG.Combat
 
         private void AttackBeheaviour()
         {
-            GetComponent<Animator>().SetTrigger("attack");
+            if (_timeBetweenAttack <= _timeSinceLastAttack)
+            {
+                GetComponent<Animator>().SetTrigger("attack");
+                _timeSinceLastAttack = 0f;
+            }
         }
 
         public void Atack(CombatTarget CombatTarget)
