@@ -54,6 +54,7 @@ namespace RPG.Combat
 
         private void AttackBeheaviour()
         {
+            transform.LookAt(_target.transform.position);
             if (_timeBetweenAttack <= _timeSinceLastAttack)
             {
                 _animator.SetTrigger("attack");
