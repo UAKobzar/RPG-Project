@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RPG.Combat;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,16 +13,47 @@ namespace RPG.Control
         [SerializeField]
         private float _chaseDistance = 5f;
 
+        private GameObject _player;
+        private Fighter _fighter;
+
+        private void Start()
+        {
+            _player = GameObject.FindGameObjectWithTag("Player");
+            _fighter = GetComponent<Fighter>();
+        }
+
+
         private void Update()
         {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            InteractWithCombat();
+        }
 
-            var distance = Vector3.Distance(player.transform.position, transform.position);
-
-            if(distance <= _chaseDistance)
+        private bool InteractWithCombat()
+        {
+            if (_player != null && _fighter.CanAttack(_player.gameObject))
             {
-                print($"{transform.name} should chase");
+              
+                if (InAttackRangeOfPlayer())
+                {
+                    _fighter.Atack(_player);
+
+                    return true;
+                }
+                else
+                {
+                    _fighter.Cancel();
+                    return false;
+                }
             }
+
+
+            return false;
+        }
+
+        private bool InAttackRangeOfPlayer()
+        {
+            var distance = Vector3.Distance(_player.transform.position, transform.position);
+            return distance < _chaseDistance;
         }
     }
 }

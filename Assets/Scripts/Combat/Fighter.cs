@@ -18,7 +18,7 @@ namespace RPG.Combat
         [SerializeField]
         private float _weaponDamage = 5f;
 
-        private float _timeSinceLastAttack;
+        private float _timeSinceLastAttack = Mathf.Infinity;
 
         private Health _target;
 
@@ -63,7 +63,7 @@ namespace RPG.Combat
             }
         }
 
-        public void Atack(CombatTarget combatTarget)
+        public void Atack(GameObject combatTarget)
         {
             GetComponent<ActionScheduler>().StartAction(this);
             _target = combatTarget.GetComponent<Health>();
@@ -77,7 +77,7 @@ namespace RPG.Combat
 
         }
 
-        public bool CanAttack(CombatTarget target)
+        public bool CanAttack(GameObject target)
         {
             return target != null && !target.GetComponent<Health>().IsDead;
         }
